@@ -2,10 +2,13 @@ import pygame
 
 from config import *
 from helper import *
+from forms import *
 
 
 pygame.init()
 
+print('press space to start, pause and resume')
+print('press UP key to change the model')
 
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption(NAME)
@@ -28,13 +31,9 @@ for i in range(no_squares['height']):
     mat.append(r)
 
 
-# current form that is iterating
-form = glider
-for cell in form:
-    x, y = cell[0], cell[1]
-    pygame.draw.rect(screen, BROWN, matrix[x][y])
-    mat[x][y] = 1
-
+form_number = 0
+form, form_number = get_from(form_number)
+mat = compute_form_middle(mat, form)
 
 run = True
 pause = True
@@ -52,7 +51,8 @@ while run:
     if keys[pygame.K_SPACE]:
         pause = not pause
     if keys[pygame.K_UP]:
-        mat = change_form(mat, cell_row_10)
+        form, form_number = get_from(form_number)
+        mat = compute_form_middle(mat, form)
         pause = True
 
     n, m = len(mat), len(mat[0])
